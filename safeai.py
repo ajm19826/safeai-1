@@ -1,89 +1,53 @@
-import json
-import numpy as np
-from dataset import dataset, vocab, answer_map
-from neuralnet import NeuralNetwork
-from utils import encode_question, decode_answer
+from reasoning import Reasoner
+from rules import RuleEngine
+from memory import MemoryGraph
+from reinforcement import Reinforcement
+from confidence import score
+from neural import NeuralAssist
 
-KNOWLEDGE_FILE = "knowledge.json"
+LOG_FILE = "logs.txt"
 
-# Load persistent knowledge
-try:
-    with open(KNOWLEDGE_FILE, "r") as f:
-        persistent_knowledge = json.load(f)
-        for item in persistent_knowledge:
-            dataset.append({"question": item["question"], "answer": len(answer_map)})
-            answer_map[len(answer_map)] = item["answer"]
-except FileNotFoundError:
-    persistent_knowledge = []
+rules = RuleEngine()
+memory = MemoryGraph()
+neural = NeuralAssist()
+reinforce = Reinforcement()
+reasoner = Reasoner(rules, memory, neural)
 
-# Prepare training data
-X = np.array([encode_question(d['question']) for d in dataset])
-y = np.zeros((len(dataset), len(answer_map)))
-for i, d in enumerate(dataset):
-    y[i][d['answer']] = 1
+def log(thoughts):
+    with open(LOG_FILE, "a", encoding="utf-8") as f:
+        for t in thoughts:
+            f.write("[THOUGHT] " + t + "\n")
+        f.write("\n")
 
-# Initialize neural network
-nn = NeuralNetwork(input_size=X.shape[1], hidden_size=10, output_size=len(answer_map), lr=0.5)
-print("Training neural network on structured questions...")
-nn.train(X, y, epochs=500)
-print("Training complete!\n")
+print("SafeAI-1 (Step 5: Neural-Assisted Reasoning)")
+print("Commands:")
+print("  @improve: A + B -> A+B")
+print("  @learn: water = H2O")
+print("  exit\n")
 
-# Keyword responses
-def keyword_response(question):
-    q = question.lower()
-    if "weather" in q: return "Check your local weather app!"
-    if "book" in q or "read" in q: return "Try '1984' by Orwell or 'Sapiens' by Harari."
-    if "coworker" in q: return "Sounds like you might need to communicate or take a break!"
-    if "hello" in q or "hi" in q: return "Hello! How can I help you today?"
-    if "your name" in q: return "I am SafeAI-1, your personal AI!"
-    return None
-
-# Main loop
-print("SafeAI-1 is ready! Ask questions or type 'exit'.\n")
 while True:
-    question = input("You: ")
-    if question.lower() == "exit":
+    user = input("You: ")
+    if user == "exit":
         break
 
-    # Keyword first
-    response = keyword_response(question)
-    if response:
-        print("SafeAI-1:", response, "\n")
+    thoughts = [f"Input: {user}"]
+
+    if user.startswith("@improve:"):
+        left, right = user.replace("@improve:", "").split("->")
+        rules.add_rule(left.strip(), right.strip())
+        print("SafeAI-1: Rule learned.")
         continue
 
-    # Neural network prediction
-    vec = np.array([encode_question(question)])
-    class_index = nn.predict(vec)[0]
-    answer = decode_answer(class_index)
-    print("SafeAI-1:", answer)
+    if user.startswith("@learn:"):
+        left, right = user.replace("@learn:", "").split("=")
+        memory.add_concept(left.strip(), right.strip())
+        memory.link(left.strip(), right.strip())
+        print("SafeAI-1: Concept learned.")
+        continue
 
-    # Feedback learning
-    correct = input("Was this correct? (y/n): ").lower()
-    if correct == "n":
-        user_answer = input("Provide the correct answer: ")
+    response, success = reasoner.think(user, thoughts)
+    conf = score(thoughts, success)
+    thoughts.append(f"Confidence: {conf}")
 
-        # Add new question
-        dataset.append({"question": question, "answer": len(answer_map)})
-        answer_map[len(answer_map)] = user_answer
-
-        # Expand vocab dynamically
-        for w in question.lower().split():
-            if w not in vocab:
-                vocab.append(w)
-
-        # Rebuild training data
-        X = np.array([encode_question(d['question']) for d in dataset])
-        y = np.zeros((len(dataset), len(answer_map)))
-        for i, d in enumerate(dataset):
-            y[i][d['answer']] = 1
-
-        # Re-init neural network with new output size
-        nn = NeuralNetwork(input_size=X.shape[1], hidden_size=10, output_size=len(answer_map), lr=0.5)
-        nn.train(X, y, epochs=200)  # smaller for speed
-
-        # Save persistent knowledge
-        persistent_knowledge.append({"question": question, "answer": user_answer})
-        with open(KNOWLEDGE_FILE, "w") as f:
-            json.dump(persistent_knowledge, f, indent=2)
-
-        print("SafeAI-1: Got it! I will remember this for next time.\n")
+    log(thoughts)
+    print(f"SafeAI-1 ({conf}): {response}")
