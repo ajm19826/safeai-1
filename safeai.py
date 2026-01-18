@@ -1,17 +1,20 @@
 from reasoning import Reasoner
 from rules import RuleEngine
 from memory import MemoryGraph
+from neural import NeuralAssist
+from planner import Planner
 from reinforcement import Reinforcement
 from confidence import score
-from neural import NeuralAssist
 
 LOG_FILE = "logs.txt"
 
 rules = RuleEngine()
 memory = MemoryGraph()
 neural = NeuralAssist()
+planner = Planner(memory, rules)
 reinforce = Reinforcement()
-reasoner = Reasoner(rules, memory, neural)
+
+reasoner = Reasoner(rules, memory, neural, planner)
 
 def log(thoughts):
     with open(LOG_FILE, "a", encoding="utf-8") as f:
@@ -19,7 +22,7 @@ def log(thoughts):
             f.write("[THOUGHT] " + t + "\n")
         f.write("\n")
 
-print("SafeAI-1 (Step 5: Neural-Assisted Reasoning)")
+print("SafeAI-1 (Step 6: Autonomous AI Agent)")
 print("Commands:")
 print("  @improve: A + B -> A+B")
 print("  @learn: water = H2O")
@@ -47,7 +50,13 @@ while True:
 
     response, success = reasoner.think(user, thoughts)
     conf = score(thoughts, success)
-    thoughts.append(f"Confidence: {conf}")
 
+    if success:
+        reinforce.reward()
+    else:
+        reinforce.punish()
+
+    thoughts.append(f"Confidence: {conf}")
     log(thoughts)
+
     print(f"SafeAI-1 ({conf}): {response}")

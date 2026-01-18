@@ -1,46 +1,48 @@
 from utils import tokenize, is_math
 
 class Reasoner:
-    def __init__(self, rule_engine, memory, neural):
+    def __init__(self, rule_engine, memory, neural, planner):
         self.rules = rule_engine
         self.memory = memory
         self.neural = neural
+        self.planner = planner
 
     def think(self, text, thoughts):
         tokens = tokenize(text)
         thoughts.append(f"Tokens: {tokens}")
 
-        # Neural intuition
-        hint = self.neural.predict(tokens)
-        thoughts.append(f"Neural hint: {['math','concept','unknown'][hint]}")
+        plan = self.planner.plan(text, thoughts)
 
-        # 1️⃣ Rules
-        rule_result = self.rules.apply(text)
-        if rule_result:
-            thoughts.append("Rule engine succeeded")
-            self.neural.train(tokens, 0)
-            return rule_result, True
+        for step in plan:
+            if step == "answer":
+                rule = self.rules.apply(text)
+                if rule:
+                    thoughts.append("Answered using rule")
+                    self.neural.train(tokens, 0)
+                    return rule, True
 
-        # 2️⃣ Math
-        if hint == 0 and is_math(tokens):
-            try:
-                expr = "".join(tokens)
-                result = eval(expr)
-                thoughts.append(f"Math evaluated: {expr}")
-                self.neural.train(tokens, 0)
-                return result, True
-            except:
-                thoughts.append("Math failed")
+            if step == "math" and is_math(tokens):
+                try:
+                    expr = "".join(tokens)
+                    result = eval(expr)
+                    thoughts.append(f"Math solved: {expr}")
+                    self.neural.train(tokens, 0)
+                    return result, True
+                except:
+                    thoughts.append("Math failed")
 
-        # 3️⃣ Concept memory
-        if hint == 1:
-            for t in tokens:
-                if self.memory.knows(t):
-                    props = self.memory.get_properties(t)
-                    thoughts.append(f"Concept recall: {t}")
-                    self.neural.train(tokens, 1)
-                    return ", ".join(props), True
+            if step == "learn_concept":
+                thoughts.append("Potential concept detected")
+                return "Tell me more so I can learn.", False
+
+            if step == "explore":
+                thoughts.append("Exploration mode activated")
+                related = []
+                for t in tokens:
+                    related.extend(self.memory.related(t))
+                if related:
+                    return f"Related concepts: {set(related)}", True
 
         self.neural.train(tokens, 2)
-        thoughts.append("All reasoning paths failed")
+        thoughts.append("Plan execution failed")
         return "I don't know yet.", False
