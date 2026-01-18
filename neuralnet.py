@@ -1,7 +1,7 @@
 import numpy as np
 
 class NeuralNetwork:
-    def __init__(self, input_size, hidden_size, output_size, lr=0.1):
+    def __init__(self, input_size, hidden_size, output_size, lr=0.5):
         self.W1 = np.random.randn(input_size, hidden_size) * 0.01
         self.b1 = np.zeros((1, hidden_size))
         self.W2 = np.random.randn(hidden_size, output_size) * 0.01
@@ -42,7 +42,7 @@ class NeuralNetwork:
             output = self.forward(X)
             self.backward(X, y, output)
             if epoch % 100 == 0:
-                loss = np.mean((y - output) ** 2)
+                loss = np.mean((y-output)**2)
                 print(f"Epoch {epoch}, Loss: {loss:.4f}")
 
     def predict(self, X):
