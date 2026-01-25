@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000";
+const API_URL = "https://safeai-houselearning.onrender.com/";
 
 async function sendMessage() {
     const input = document.getElementById("user-input");
