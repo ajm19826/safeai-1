@@ -1,0 +1,439 @@
+{
+  "version": "1.0",
+  "truncation": null,
+  "padding": null,
+  "added_tokens": [
+    {
+      "id": 0,
+      "content": "[PAD]",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": false,
+      "special": true
+    },
+    {
+      "id": 1,
+      "content": "[UNK]",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": false,
+      "special": true
+    },
+    {
+      "id": 2,
+      "content": "[BOS]",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": false,
+      "special": true
+    },
+    {
+      "id": 3,
+      "content": "[EOS]",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": false,
+      "special": true
+    }
+  ],
+  "normalizer": null,
+  "pre_tokenizer": {
+    "type": "Whitespace"
+  },
+  "post_processor": null,
+  "decoder": null,
+  "model": {
+    "type": "BPE",
+    "dropout": null,
+    "unk_token": "[UNK]",
+    "continuing_subword_prefix": null,
+    "end_of_word_suffix": null,
+    "fuse_unk": false,
+    "byte_fallback": false,
+    "ignore_merges": false,
+    "vocab": {
+      "[PAD]": 0,
+      "[UNK]": 1,
+      "[BOS]": 2,
+      "[EOS]": 3,
+      ",": 4,
+      ".": 5,
+      "R": 6,
+      "T": 7,
+      "a": 8,
+      "b": 9,
+      "c": 10,
+      "d": 11,
+      "e": 12,
+      "f": 13,
+      "g": 14,
+      "h": 15,
+      "i": 16,
+      "j": 17,
+      "l": 18,
+      "m": 19,
+      "n": 20,
+      "o": 21,
+      "p": 22,
+      "r": 23,
+      "s": 24,
+      "t": 25,
+      "u": 26,
+      "v": 27,
+      "w": 28,
+      "x": 29,
+      "y": 30,
+      "th": 31,
+      "er": 32,
+      "is": 33,
+      "la": 34,
+      "the": 35,
+      "Th": 36,
+      "an": 37,
+      "be": 38,
+      "ce": 39,
+      "co": 40,
+      "in": 41,
+      "mo": 42,
+      "pla": 43,
+      "us": 44,
+      "place": 45,
+      "Re": 46,
+      "ain": 47,
+      "can": 48,
+      "de": 49,
+      "di": 50,
+      "der": 51,
+      "ex": 52,
+      "fi": 53,
+      "ger": 54,
+      "ho": 55,
+      "ith": 56,
+      "jus": 57,
+      "le": 58,
+      "lder": 59,
+      "me": 60,
+      "ou": 61,
+      "ow": 62,
+      "pus": 63,
+      "re": 64,
+      "rain": 65,
+      "rger": 66,
+      "rpus": 67,
+      "se": 68,
+      "tt": 69,
+      "tex": 70,
+      "train": 71,
+      "ver": 72,
+      "with": 73,
+      "you": 74,
+      "this": 75,
+      "larger": 76,
+      "The": 77,
+      "This": 78,
+      "and": 79,
+      "beco": 80,
+      "bett": 81,
+      "corpus": 82,
+      "ing": 83,
+      "mode": 84,
+      "more": 85,
+      "placeho": 86,
+      "Replace": 87,
+      "diver": 88,
+      "file": 89,
+      "just": 90,
+      "own": 91,
+      "text": 92,
+      "training": 93,
+      "your": 94,
+      "become": 95,
+      "better": 96,
+      "model": 97,
+      "placeholder": 98,
+      "diverse": 99
+    },
+    "merges": [
+      [
+        "t",
+        "h"
+      ],
+      [
+        "e",
+        "r"
+      ],
+      [
+        "i",
+        "s"
+      ],
+      [
+        "l",
+        "a"
+      ],
+      [
+        "th",
+        "e"
+      ],
+      [
+        "T",
+        "h"
+      ],
+      [
+        "a",
+        "n"
+      ],
+      [
+        "b",
+        "e"
+      ],
+      [
+        "c",
+        "e"
+      ],
+      [
+        "c",
+        "o"
+      ],
+      [
+        "i",
+        "n"
+      ],
+      [
+        "m",
+        "o"
+      ],
+      [
+        "p",
+        "la"
+      ],
+      [
+        "u",
+        "s"
+      ],
+      [
+        "pla",
+        "ce"
+      ],
+      [
+        "R",
+        "e"
+      ],
+      [
+        "a",
+        "in"
+      ],
+      [
+        "c",
+        "an"
+      ],
+      [
+        "d",
+        "e"
+      ],
+      [
+        "d",
+        "i"
+      ],
+      [
+        "d",
+        "er"
+      ],
+      [
+        "e",
+        "x"
+      ],
+      [
+        "f",
+        "i"
+      ],
+      [
+        "g",
+        "er"
+      ],
+      [
+        "h",
+        "o"
+      ],
+      [
+        "i",
+        "th"
+      ],
+      [
+        "j",
+        "us"
+      ],
+      [
+        "l",
+        "e"
+      ],
+      [
+        "l",
+        "der"
+      ],
+      [
+        "m",
+        "e"
+      ],
+      [
+        "o",
+        "u"
+      ],
+      [
+        "o",
+        "w"
+      ],
+      [
+        "p",
+        "us"
+      ],
+      [
+        "r",
+        "e"
+      ],
+      [
+        "r",
+        "ain"
+      ],
+      [
+        "r",
+        "ger"
+      ],
+      [
+        "r",
+        "pus"
+      ],
+      [
+        "s",
+        "e"
+      ],
+      [
+        "t",
+        "t"
+      ],
+      [
+        "t",
+        "ex"
+      ],
+      [
+        "t",
+        "rain"
+      ],
+      [
+        "v",
+        "er"
+      ],
+      [
+        "w",
+        "ith"
+      ],
+      [
+        "y",
+        "ou"
+      ],
+      [
+        "th",
+        "is"
+      ],
+      [
+        "la",
+        "rger"
+      ],
+      [
+        "Th",
+        "e"
+      ],
+      [
+        "Th",
+        "is"
+      ],
+      [
+        "an",
+        "d"
+      ],
+      [
+        "be",
+        "co"
+      ],
+      [
+        "be",
+        "tt"
+      ],
+      [
+        "co",
+        "rpus"
+      ],
+      [
+        "in",
+        "g"
+      ],
+      [
+        "mo",
+        "de"
+      ],
+      [
+        "mo",
+        "re"
+      ],
+      [
+        "place",
+        "ho"
+      ],
+      [
+        "Re",
+        "place"
+      ],
+      [
+        "di",
+        "ver"
+      ],
+      [
+        "fi",
+        "le"
+      ],
+      [
+        "jus",
+        "t"
+      ],
+      [
+        "ow",
+        "n"
+      ],
+      [
+        "tex",
+        "t"
+      ],
+      [
+        "train",
+        "ing"
+      ],
+      [
+        "you",
+        "r"
+      ],
+      [
+        "beco",
+        "me"
+      ],
+      [
+        "bett",
+        "er"
+      ],
+      [
+        "mode",
+        "l"
+      ],
+      [
+        "placeho",
+        "lder"
+      ],
+      [
+        "diver",
+        "se"
+      ]
+    ]
+  }
+}
